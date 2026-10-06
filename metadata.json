@@ -1,0 +1,6 @@
+{
+  "name": "ArenaX Backend Engine & Matchmaking Architecture",
+  "description": "Production-grade backend architecture console for ArenaX multiplayer battle-arena: ELO matchmaking, DRF REST API explorer, JWT authentication, MySQL schema with N+1 query optimizer, and comprehensive system design interview guide.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
