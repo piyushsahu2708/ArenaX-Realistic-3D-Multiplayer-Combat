@@ -13,49 +13,73 @@ export const ProfileScreen: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto space-y-6 font-mono">
       {/* Profile Header Box */}
-      <div className="bg-slate-900/95 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">
-          <div className="flex items-center gap-4">
-            <img
-              src={activePlayer.avatar}
-              alt={activePlayer.username}
-              className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover border-2 border-cyan-500 shadow-lg"
-            />
+      <div className="bg-slate-900/95 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden">
+        {/* Subtle background glow */}
+        <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-6 relative z-10">
+          <div className="flex items-center gap-5">
+            {/* Animated Profile Avatar Ring */}
+            <div className="relative group">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 border-cyan-400 p-0.5 shadow-xl shadow-cyan-950/60 relative">
+                <img
+                  src={activePlayer.avatar}
+                  alt={activePlayer.username}
+                  className="w-full h-full rounded-xl object-cover transition-transform group-hover:scale-105"
+                />
+              </div>
+              {/* Rotating tactical border shimmer */}
+              <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-cyan-500 via-transparent to-blue-500 -z-10 blur-xs opacity-75 animate-pulse" />
+              <div className="absolute -bottom-2 -right-1 px-2 py-0.5 rounded-full bg-cyan-500 text-slate-950 font-black text-[10px] uppercase tracking-wider shadow-md">
+                LVL {activePlayer.level}
+              </div>
+            </div>
+
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-100">
-                {activePlayer.username}
-              </h1>
-              <div className="text-xs text-slate-400 mt-0.5">{activePlayer.email}</div>
-              <div className="inline-block mt-2 px-2.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[11px] font-bold">
-                Level {activePlayer.level} Combatant
+              <div className="flex items-center gap-2">
+                <h1 className="text-2xl sm:text-3xl font-black text-slate-100 tracking-tight">
+                  {activePlayer.username}
+                </h1>
+                <span className="text-xs text-cyan-400 font-bold bg-cyan-950/80 border border-cyan-800/80 px-2 py-0.5 rounded-md">
+                  PIYUSH#ARENA
+                </span>
+              </div>
+              <div className="text-xs text-slate-400 mt-1 flex items-center gap-2">
+                <span className="text-amber-400 font-semibold">CLASS: TACTICAL WARRIOR</span>
+                <span className="text-slate-600">·</span>
+                <span>{activePlayer.email}</span>
+              </div>
+              <div className="inline-flex items-center gap-2 mt-2 px-3 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-bold text-slate-200">
+                <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Special: Tactical Vision [Q]</span>
               </div>
             </div>
           </div>
 
           <div className="text-left sm:text-right">
-            <div className="text-xs text-slate-400 uppercase">Competitive Rating</div>
-            <div className="text-3xl font-extrabold text-cyan-400">⭐ {activePlayer.elo_rating}</div>
-            <div className="text-[11px] text-amber-400 mt-0.5">{activePlayer.coins} Gold Coins</div>
+            <div className="text-xs text-slate-400 uppercase tracking-wider">Competitive Rating</div>
+            <div className="text-3xl sm:text-4xl font-black text-cyan-400">⭐ {activePlayer.elo_rating}</div>
+            <div className="text-xs text-amber-400 font-bold mt-0.5">{activePlayer.coins} Gold Coins</div>
           </div>
         </div>
 
         {/* Detailed Stats Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-          <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80">
-            <div className="text-[10px] text-slate-500 uppercase">Total Matches</div>
-            <div className="text-xl font-bold text-slate-100">{activePlayer.stats.matches_played}</div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center relative z-10">
+          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800/80 shadow-md">
+            <div className="text-[10px] text-slate-500 uppercase tracking-wider">MATCHES</div>
+            <div className="text-2xl font-black text-slate-100 mt-0.5">{activePlayer.stats.matches_played}</div>
           </div>
-          <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80">
-            <div className="text-[10px] text-slate-500 uppercase">Match Wins</div>
-            <div className="text-xl font-bold text-emerald-400">{activePlayer.stats.wins}</div>
+          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800/80 shadow-md">
+            <div className="text-[10px] text-slate-500 uppercase tracking-wider">WINS</div>
+            <div className="text-2xl font-black text-emerald-400 mt-0.5">{activePlayer.stats.wins}</div>
           </div>
-          <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80">
-            <div className="text-[10px] text-slate-500 uppercase">Losses</div>
-            <div className="text-xl font-bold text-rose-400">{activePlayer.stats.losses}</div>
+          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800/80 shadow-md">
+            <div className="text-[10px] text-slate-500 uppercase tracking-wider">LOSSES</div>
+            <div className="text-2xl font-black text-rose-400 mt-0.5">{activePlayer.stats.losses}</div>
           </div>
-          <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80">
-            <div className="text-[10px] text-slate-500 uppercase">Win Rate</div>
-            <div className="text-xl font-bold text-cyan-300">{activePlayer.stats.win_rate}%</div>
+          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800/80 shadow-md">
+            <div className="text-[10px] text-slate-500 uppercase tracking-wider">WIN RATE</div>
+            <div className="text-2xl font-black text-cyan-300 mt-0.5">{activePlayer.stats.win_rate}%</div>
           </div>
         </div>
 

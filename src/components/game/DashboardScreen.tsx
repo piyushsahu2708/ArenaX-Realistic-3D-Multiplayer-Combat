@@ -36,7 +36,7 @@ export const DashboardScreen: React.FC = () => {
   const [claimToast, setClaimToast] = useState<string | null>(null);
   const [showHeroModal, setShowHeroModal] = useState<boolean>(false);
 
-  const activeHero = HEROES[selectedHeroId || 'BLAZE'] || HEROES.BLAZE;
+  const activeHero = HEROES[selectedHeroId || 'PIYUSH'] || HEROES.PIYUSH;
 
   // Experience math for Level progress bar
   const currentXp = activePlayer.experience;

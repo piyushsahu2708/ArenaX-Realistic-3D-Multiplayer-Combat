@@ -234,7 +234,7 @@ export const ArenaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   ]);
 
   const activePlayer = currentUser || players[0];
-  const selectedHeroId = activePlayer.selectedHeroId || 'BLAZE';
+  const selectedHeroId = activePlayer.selectedHeroId || 'PIYUSH';
 
   const setSelectedHeroId = (heroId: HeroId) => {
     if (!currentUser) return;

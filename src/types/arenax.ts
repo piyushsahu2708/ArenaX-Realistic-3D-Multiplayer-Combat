@@ -1,6 +1,6 @@
 export type Role = 'PLAYER' | 'ADMIN' | 'MODERATOR';
 
-export type HeroId = 'BLAZE' | 'VOLT' | 'TITAN' | 'SHADOW';
+export type HeroId = 'PIYUSH' | 'BLAZE' | 'VOLT' | 'TITAN' | 'SHADOW';
 
 export interface Hero {
   id: HeroId;

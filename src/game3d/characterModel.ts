@@ -138,40 +138,126 @@ export class Character3DModel {
     this.headGroup.position.y = 0.52;
     this.torsoGroup.add(this.headGroup);
 
-    // Neck
-    const neckGeo = new THREE.CylinderGeometry(0.07, 0.08, 0.1, 8);
+    // Realistic Anatomical Neck
+    const neckGeo = new THREE.CylinderGeometry(0.068, 0.082, 0.11, 12);
     const neckMesh = new THREE.Mesh(neckGeo, skinMat);
     neckMesh.position.y = -0.01;
+    neckMesh.castShadow = true;
     this.headGroup.add(neckMesh);
 
-    // Head base
-    const headGeo = new THREE.BoxGeometry(0.2, 0.23, 0.21);
+    // Anatomical Head Cranium
+    const headGeo = new THREE.BoxGeometry(0.19, 0.22, 0.20);
     const headMesh = new THREE.Mesh(headGeo, skinMat);
     headMesh.position.y = 0.14;
     headMesh.castShadow = true;
     this.headGroup.add(headMesh);
 
-    // Hair / Headgear
-    const hairMat = new THREE.MeshStandardMaterial({
-      color: visualPreset.hairStyle === 'bob_white' ? 0xe2e8f0 : 0x1a1512,
-      roughness: 0.9,
+    // Defined Athletic Jawline & Chin
+    const jawMat = new THREE.MeshStandardMaterial({
+      color: visualPreset.skinTone,
+      roughness: 0.65,
     });
-    const hairGeo = new THREE.BoxGeometry(0.22, 0.12, 0.23);
-    const hairMesh = new THREE.Mesh(hairGeo, hairMat);
-    hairMesh.position.set(0, 0.23, -0.01);
-    this.headGroup.add(hairMesh);
+    const jawGeo = new THREE.BoxGeometry(0.17, 0.08, 0.12);
+    const jawMesh = new THREE.Mesh(jawGeo, jawMat);
+    jawMesh.position.set(0, 0.06, 0.05);
+    jawMesh.castShadow = true;
+    this.headGroup.add(jawMesh);
 
-    // If Piyush, add tactical glasses / spectacles
+    // Realistic Ears
+    const earGeo = new THREE.BoxGeometry(0.025, 0.06, 0.04);
+    const leftEar = new THREE.Mesh(earGeo, skinMat);
+    leftEar.position.set(-0.105, 0.14, 0.01);
+    const rightEar = new THREE.Mesh(earGeo, skinMat);
+    rightEar.position.set(0.105, 0.14, 0.01);
+    this.headGroup.add(leftEar);
+    this.headGroup.add(rightEar);
+
+    // Realistic Facial Hair (Well-groomed stubble beard for Piyush)
+    if (this.characterId === 'PIYUSH') {
+      const beardMat = new THREE.MeshStandardMaterial({
+        color: 0x1f1d1b,
+        roughness: 0.9,
+      });
+      const beardGeo = new THREE.BoxGeometry(0.174, 0.06, 0.07);
+      const beardMesh = new THREE.Mesh(beardGeo, beardMat);
+      beardMesh.position.set(0, 0.055, 0.085);
+      this.headGroup.add(beardMesh);
+    }
+
+    // Hair / Headgear with Natural Volumetric Curly Silhouette for Piyush
+    const hairMat = new THREE.MeshStandardMaterial({
+      color: visualPreset.hairStyle === 'bob_white' ? 0xe2e8f0 : 0x141211,
+      roughness: 0.85,
+    });
+
+    if (visualPreset.hairStyle === 'styled_curly') {
+      // Main crown
+      const crownGeo = new THREE.BoxGeometry(0.21, 0.11, 0.22);
+      const crownMesh = new THREE.Mesh(crownGeo, hairMat);
+      crownMesh.position.set(0, 0.24, -0.01);
+      crownMesh.castShadow = true;
+      this.headGroup.add(crownMesh);
+
+      // Curly textured strands & bangs across forehead
+      const curlFrontGeo = new THREE.BoxGeometry(0.18, 0.05, 0.06);
+      const curlFront = new THREE.Mesh(curlFrontGeo, hairMat);
+      curlFront.position.set(0, 0.24, 0.105);
+      this.headGroup.add(curlFront);
+
+      // Side curls
+      const curlSideL = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.09, 0.14), hairMat);
+      curlSideL.position.set(-0.105, 0.21, 0.01);
+      const curlSideR = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.09, 0.14), hairMat);
+      curlSideR.position.set(0.105, 0.21, 0.01);
+      this.headGroup.add(curlSideL);
+      this.headGroup.add(curlSideR);
+    } else {
+      const hairGeo = new THREE.BoxGeometry(0.22, 0.12, 0.23);
+      const hairMesh = new THREE.Mesh(hairGeo, hairMat);
+      hairMesh.position.set(0, 0.23, -0.01);
+      this.headGroup.add(hairMesh);
+    }
+
+    // Piyush Signature Sleek Tactical Glasses
     if (visualPreset.glasses) {
       const glassesMat = new THREE.MeshStandardMaterial({
-        color: 0x94a3b8,
-        metalness: 0.9,
+        color: 0x0f172a,
+        metalness: 0.95,
         roughness: 0.1,
       });
-      const glassesGeo = new THREE.BoxGeometry(0.18, 0.04, 0.04);
-      const glassesMesh = new THREE.Mesh(glassesGeo, glassesMat);
-      glassesMesh.position.set(0, 0.14, 0.115);
-      this.headGroup.add(glassesMesh);
+      const lensMat = new THREE.MeshPhysicalMaterial({
+        color: 0x38bdf8,
+        transmission: 0.85,
+        opacity: 0.85,
+        transparent: true,
+        roughness: 0.05,
+        ior: 1.5,
+      });
+
+      // Glasses bridge & dark metallic frame
+      const frameGeo = new THREE.BoxGeometry(0.175, 0.042, 0.035);
+      const frameMesh = new THREE.Mesh(frameGeo, glassesMat);
+      frameMesh.position.set(0, 0.155, 0.112);
+      this.headGroup.add(frameMesh);
+
+      // Tactical anti-glare lenses
+      const lensGeo = new THREE.BoxGeometry(0.065, 0.035, 0.01);
+      const lensL = new THREE.Mesh(lensGeo, lensMat);
+      lensL.position.set(-0.045, 0.155, 0.122);
+      const lensR = new THREE.Mesh(lensGeo, lensMat);
+      lensR.position.set(0.045, 0.155, 0.122);
+      this.headGroup.add(lensL);
+      this.headGroup.add(lensR);
+
+      // Temples going back over ears
+      const templeMat = glassesMat;
+      const templeGeo = new THREE.BoxGeometry(0.01, 0.015, 0.14);
+      const templeL = new THREE.Mesh(templeGeo, templeMat);
+      templeL.position.set(-0.09, 0.155, 0.04);
+      const templeR = new THREE.Mesh(templeGeo, templeMat);
+      templeR.position.set(0.09, 0.155, 0.04);
+      this.headGroup.add(templeL);
+      this.headGroup.add(templeR);
     }
 
     // 3. Left Arm

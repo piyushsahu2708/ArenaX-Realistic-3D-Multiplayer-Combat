@@ -1,6 +1,22 @@
 import { Hero, HeroId, DailyMission } from '../types/arenax';
 
 export const HEROES: Record<HeroId, Hero> = {
+  PIYUSH: {
+    id: 'PIYUSH',
+    name: 'Piyush',
+    tagline: 'The Tactical Warrior · PIYUSH#ARENA',
+    description: 'Elite frontline operative with precision accuracy, tactical vision scanning, and unbreakable athletic agility.',
+    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
+    elementIcon: '⚡',
+    themeColor: 'from-cyan-500 to-blue-600',
+    baseHp: 100,
+    baseAtk: 26,
+    baseDefPercent: 12,
+    critChance: 0.25,
+    specialName: 'Tactical Vision',
+    specialDesc: 'Engages combat reconnaissance: reveals targets through cover, guarantees critical strike and +40 barrier.',
+    specialEnergyCost: 3,
+  },
   BLAZE: {
     id: 'BLAZE',
     name: 'Blaze',

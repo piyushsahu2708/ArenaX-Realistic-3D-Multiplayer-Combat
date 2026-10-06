@@ -39,7 +39,7 @@ export const HeroRosterModal: React.FC<HeroRosterModalProps> = ({ isOpen, onClos
         </div>
 
         {/* Hero Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
           {heroList.map((hero) => {
             const isSelected = selectedHeroId === hero.id;
 
