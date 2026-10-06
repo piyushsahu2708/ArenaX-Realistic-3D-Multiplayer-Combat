@@ -100,6 +100,24 @@ export const Arena3DCanvas: React.FC = () => {
   const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [matchStatus, setMatchStatus] = useState<'PLAYING' | 'VICTORY' | 'DEFEAT'>('PLAYING');
+  const [arenaLoading, setArenaLoading] = useState<boolean>(true);
+  const [loadingProgress, setLoadingProgress] = useState<number>(0);
+
+  // Smooth loading screen transition into 3D city
+  useEffect(() => {
+    let current = 0;
+    const interval = setInterval(() => {
+      current += 15;
+      if (current >= 100) {
+        setLoadingProgress(100);
+        clearInterval(interval);
+        setTimeout(() => setArenaLoading(false), 400);
+      } else {
+        setLoadingProgress(current);
+      }
+    }, 120);
+    return () => clearInterval(interval);
+  }, []);
 
   // Interactive Prompt (e.g. "Press E to pick up Medkit")
   const [nearbyPickupPrompt, setNearbyPickupPrompt] = useState<string | null>(null);
@@ -659,6 +677,42 @@ export const Arena3DCanvas: React.FC = () => {
 
   return (
     <div className="relative w-full h-[82vh] bg-slate-950 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl select-none font-mono">
+      {/* Arena Loading Screen Transition */}
+      {arenaLoading && (
+        <div className="absolute inset-0 z-50 bg-[#07090e] flex flex-col items-center justify-center p-6 text-center space-y-6">
+          <div className="space-y-2">
+            <div className="text-xs font-black text-cyan-400 tracking-widest uppercase flex items-center justify-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+              <span>ENTERING ABANDONED CITY...</span>
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-black text-white tracking-wider font-mono">
+              ARENA<span className="text-cyan-400">X</span>
+            </h2>
+            <p className="text-xs text-slate-400 font-mono max-w-sm">
+              Spawning Piyush (Tactical Warrior) · Initializing Unreal-style 3D Physics & Bot AI
+            </p>
+          </div>
+
+          {/* Tactical Progress Bar */}
+          <div className="w-64 max-w-full space-y-2">
+            <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+              <span>LOADING ARENA</span>
+              <span className="text-cyan-300 font-bold">{loadingProgress}%</span>
+            </div>
+            <div className="h-2 w-full bg-slate-900 rounded-full overflow-hidden border border-slate-800 p-0.5">
+              <div
+                className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-200"
+                style={{ width: `${loadingProgress}%` }}
+              ></div>
+            </div>
+          </div>
+
+          <div className="text-[10px] text-slate-500 font-mono">
+            WASD: Move · LMB: Fire · RMB: ADS Aim · Q: Tactical Vision · E: Pickup
+          </div>
+        </div>
+      )}
+
       {/* Three.js 3D Viewport Canvas */}
       <div
         ref={canvasContainerRef}

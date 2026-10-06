@@ -106,7 +106,7 @@ const DEFAULT_JWT_REFRESH =
 export const ArenaProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [players, setPlayers] = useState<Player[]>(INITIAL_PLAYERS);
   const [currentUser, setCurrentUser] = useState<Player | null>(INITIAL_PLAYERS[0]);
-  const [currentScreen, setCurrentScreen] = useState<GameScreen>('DASHBOARD');
+  const [currentScreen, setCurrentScreen] = useState<GameScreen>('LANDING');
   const [dailyRewardClaimed, setDailyRewardClaimed] = useState<boolean>(false);
   const [battleMode, setBattleMode] = useState<'RANKED' | 'CASUAL'>('RANKED');
 

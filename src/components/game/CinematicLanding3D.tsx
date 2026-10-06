@@ -72,35 +72,42 @@ export const CinematicLanding3D: React.FC<CinematicLanding3DProps> = ({ onEnterG
     // 4. Detailed Environment Background
     const cityMap = new CityMap3D(scene);
 
-    // 5. Cinematic Lighting
-    // Ambient moonlit coolness
-    const ambientLight = new THREE.AmbientLight(0x1e293b, 1.2);
+    // 5. Cinematic Lighting: Three-Point Lighting with Face Clarity
+    // Cool blue ambient fill
+    const ambientLight = new THREE.AmbientLight(0x334155, 1.4);
     scene.add(ambientLight);
 
-    // Dynamic Key spotlight focusing on Piyush
-    const heroSpotlight = new THREE.SpotLight(0x67e8f9, 4.5, 30, Math.PI / 4, 0.5, 1.5);
-    heroSpotlight.position.set(2, 7, 5);
-    heroSpotlight.target.position.set(0, 1.3, 0);
-    heroSpotlight.castShadow = true;
-    heroSpotlight.shadow.mapSize.width = 1024;
-    heroSpotlight.shadow.mapSize.height = 1024;
-    scene.add(heroSpotlight);
-    scene.add(heroSpotlight.target);
+    // Warm Key Spotlight directly on Piyush's face & chest
+    const keySpotlight = new THREE.SpotLight(0xffedd5, 5.5, 25, Math.PI / 4, 0.4, 1.2);
+    keySpotlight.position.set(1.8, 4.2, 4.5);
+    keySpotlight.target.position.set(0, 1.35, 0);
+    keySpotlight.castShadow = true;
+    keySpotlight.shadow.mapSize.width = 1024;
+    keySpotlight.shadow.mapSize.height = 1024;
+    scene.add(keySpotlight);
+    scene.add(keySpotlight.target);
 
-    // Warm street lamp rim light from rear-right
-    const rimLight = new THREE.DirectionalLight(0xf59e0b, 2.0);
-    rimLight.position.set(-6, 8, -6);
+    // Dedicated soft face fill light so eyes, glasses and expression never fade into dark
+    const faceFillLight = new THREE.PointLight(0x67e8f9, 2.8, 8);
+    faceFillLight.position.set(-0.8, 1.7, 2.2);
+    scene.add(faceFillLight);
+
+    // Fiery red/orange Rim Light from behind Piyush for dramatic silhouette definition
+    const rimLight = new THREE.DirectionalLight(0xf97316, 3.2);
+    rimLight.position.set(-3.5, 5.0, -4.0);
     scene.add(rimLight);
 
-    // Subtle tactical red fill from left building sign
-    const neonFill = new THREE.PointLight(0xef4444, 2.2, 16);
-    neonFill.position.set(-4, 2.5, 2);
-    scene.add(neonFill);
+    // Secondary cyan shoulder edge light
+    const edgeLight = new THREE.PointLight(0x06b6d4, 2.5, 12);
+    edgeLight.position.set(3.0, 2.5, -2.0);
+    scene.add(edgeLight);
 
-    // 6. Piyush Main Hero 3D Model
+    // 6. Piyush Main Hero 3D Model (Prominent heroic athletic stance)
     const hero = new Character3DModel('PIYUSH');
-    hero.root.position.set(0, 0, 0);
-    hero.root.rotation.y = 0.25; // Dynamic 3/4 hero presentation angle
+    // Positioned slightly to the right to leave composition balance for the title & CTAs on the left
+    hero.root.position.set(0.65, 0, 0);
+    hero.root.rotation.y = -0.28; // Dynamic 3/4 hero presentation angle facing towards camera
+    hero.root.scale.set(1.15, 1.15, 1.15); // Heroic athletic presence (35-45% viewport presence)
     scene.add(hero.root);
     heroModelRef.current = hero;
 
@@ -195,31 +202,32 @@ export const CinematicLanding3D: React.FC<CinematicLanding3DProps> = ({ onEnterG
 
       // Cinematic Camera Push-In Timeline (0s to 7s)
       if (cameraRef.current) {
+        const heroFocusPoint = new THREE.Vector3(0.65, 1.45, 0);
+
         if (prefersReducedMotion) {
-          // Static optimal 3/4 hero showcase view
-          cameraRef.current.position.set(0.6, 1.8, 3.4);
-          cameraRef.current.lookAt(0, 1.35, 0);
+          // Static optimal 3/4 hero showcase view framing Piyush prominently
+          cameraRef.current.position.set(0.65, 1.75, 3.2);
+          cameraRef.current.lookAt(heroFocusPoint);
         } else {
-          // 0 - 2s: Distant street reveal (z: 18 -> 10)
-          // 2 - 5s: Smooth push-in to 3/4 athletic hero framing (z: 10 -> 3.4, y: 3.2 -> 1.8, x: 0 -> 0.8)
+          // 0 - 2s: Distant street reveal (z: 14 -> 8)
+          // 2 - 5s: Smooth push-in to 3/4 athletic hero framing (z: 8 -> 3.2, y: 2.8 -> 1.75, x: 0 -> 0.65)
           // 5s+: Gentle cinematic breathing orbit
-          if (elapsedSec < 5.5) {
-            const t = Math.min(1.0, elapsedSec / 5.5);
-            // Smooth easeOutCubic
+          if (elapsedSec < 5.0) {
+            const t = Math.min(1.0, elapsedSec / 5.0);
             const ease = 1 - Math.pow(1 - t, 3);
-            const currentZ = THREE.MathUtils.lerp(16.0, 3.4, ease);
-            const currentY = THREE.MathUtils.lerp(3.2, 1.8, ease);
-            const currentX = THREE.MathUtils.lerp(0.0, 0.75, ease);
+            const currentZ = THREE.MathUtils.lerp(12.0, 3.2, ease);
+            const currentY = THREE.MathUtils.lerp(2.8, 1.75, ease);
+            const currentX = THREE.MathUtils.lerp(0.0, 0.65, ease);
             cameraRef.current.position.set(currentX, currentY, currentZ);
-            cameraRef.current.lookAt(0, 1.35, 0);
+            cameraRef.current.lookAt(heroFocusPoint);
           } else {
             // Subtle slow orbit around Piyush
-            const orbitT = (elapsedSec - 5.5) * 0.25;
-            const orbitX = 0.75 + Math.sin(orbitT) * 0.35;
-            const orbitZ = 3.4 + Math.cos(orbitT) * 0.2;
-            const orbitY = 1.8 + Math.sin(orbitT * 0.5) * 0.08;
+            const orbitT = (elapsedSec - 5.0) * 0.25;
+            const orbitX = 0.65 + Math.sin(orbitT) * 0.35;
+            const orbitZ = 3.2 + Math.cos(orbitT) * 0.2;
+            const orbitY = 1.75 + Math.sin(orbitT * 0.5) * 0.06;
             cameraRef.current.position.set(orbitX, orbitY, orbitZ);
-            cameraRef.current.lookAt(0, 1.35, 0);
+            cameraRef.current.lookAt(heroFocusPoint);
           }
         }
       }

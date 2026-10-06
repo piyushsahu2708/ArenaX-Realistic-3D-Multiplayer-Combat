@@ -45,7 +45,7 @@ function AppContent() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <main className={`flex-1 w-full mx-auto ${currentScreen === 'LANDING' ? 'max-w-7xl px-2 sm:px-4 py-2 sm:py-4' : 'max-w-7xl px-4 sm:px-6 py-6 sm:py-8'}`}>
         {showingBackendConsole ? (
           /* Backend & System Architecture Mode */
           <div className="space-y-6">

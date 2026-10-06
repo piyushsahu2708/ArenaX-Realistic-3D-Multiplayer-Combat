@@ -10,7 +10,7 @@ export const LandingScreen: React.FC = () => {
     <div className="space-y-12">
       {/* 1. Cinematic 3D Interactive Hero Experience */}
       <CinematicLanding3D
-        onEnterGame={() => setCurrentScreen(isLoggedIn ? 'DASHBOARD' : 'LOGIN')}
+        onEnterGame={() => setCurrentScreen('BATTLE_3D')}
         onExplore3D={() => setCurrentScreen('BATTLE_3D')}
       />
 
